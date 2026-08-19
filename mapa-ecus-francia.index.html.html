@@ -1,0 +1,589 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mapa interactivo de los departamentos de Francia</title>
+
+<!-- D3.js: se carga desde CDN al abrir la página -->
+<script src="https://cdn.jsdelivr.net/npm/d3@7"></script>
+
+<style>
+  :root{
+    --blue:#86a9dc;
+    --blue-dark:#476b9d;
+    --blue-light:#dbe7f7;
+    --gold:#c69a54;
+    --ink:#182333;
+    --paper:#f4f1e8;
+    --white:#ffffff;
+  }
+
+  *{box-sizing:border-box}
+
+  body{
+    margin:0;
+    font-family:Arial, Helvetica, sans-serif;
+    background:linear-gradient(135deg,#111923,#26374c);
+    color:var(--ink);
+  }
+
+  .wrapper{
+    max-width:1500px;
+    margin:0 auto;
+    padding:24px;
+  }
+
+  .header{
+    background:rgba(244,241,232,.97);
+    border-radius:16px;
+    padding:20px 24px;
+    margin-bottom:18px;
+    box-shadow:0 10px 30px rgba(0,0,0,.22);
+  }
+
+  h1{
+    margin:0 0 6px;
+    font-family:Georgia,serif;
+    font-size:30px;
+  }
+
+  .subtitle{
+    margin:0;
+    color:#536172;
+  }
+
+  .layout{
+    display:grid;
+    grid-template-columns:minmax(0,1fr) 340px;
+    gap:18px;
+  }
+
+  .map-card,.panel{
+    background:rgba(244,241,232,.98);
+    border-radius:16px;
+    box-shadow:0 10px 30px rgba(0,0,0,.22);
+    overflow:hidden;
+  }
+
+  .map-card{
+    min-height:700px;
+    position:relative;
+  }
+
+  #map{
+    width:100%;
+    height:700px;
+    display:block;
+  }
+
+  .dept{
+    fill:var(--blue);
+    stroke:#172333;
+    stroke-width:.8;
+    vector-effect:non-scaling-stroke;
+    cursor:pointer;
+    transition:fill .15s, filter .15s;
+  }
+
+  .dept:hover{
+    fill:#b9cdea;
+    filter:drop-shadow(0 0 5px rgba(198,154,84,.9));
+  }
+
+  .dept.selected{
+    fill:var(--gold);
+    stroke:#6c4d20;
+    stroke-width:1.8;
+  }
+
+  .dept.has-data{
+    fill:#c69a54;
+    stroke:#6c4d20;
+    stroke-width:1.1;
+  }
+
+  .dept.has-data:hover{
+    fill:#e0bd7c;
+  }
+
+  .dept-label{
+    font-size:7px;
+    font-weight:700;
+    fill:#142033;
+    text-anchor:middle;
+    pointer-events:none;
+    user-select:none;
+  }
+
+  .tooltip{
+    position:absolute;
+    pointer-events:none;
+    display:none;
+    background:#182333;
+    color:white;
+    padding:8px 10px;
+    border-radius:8px;
+    font-size:13px;
+    box-shadow:0 5px 15px rgba(0,0,0,.25);
+    z-index:5;
+  }
+
+  .panel{
+    padding:22px;
+  }
+
+  .panel h2{
+    font-family:Georgia,serif;
+    margin:0 0 4px;
+    font-size:27px;
+  }
+
+  .code{
+    color:#6b7787;
+    font-weight:700;
+    letter-spacing:.08em;
+    margin-bottom:18px;
+  }
+
+  .search{
+    width:100%;
+    padding:11px 12px;
+    border:1px solid #b8c2cf;
+    border-radius:9px;
+    font-size:14px;
+    margin-bottom:10px;
+  }
+
+  select{
+    width:100%;
+    padding:10px;
+    border:1px solid #b8c2cf;
+    border-radius:9px;
+    background:white;
+    margin-bottom:18px;
+  }
+
+  .info-box{
+    background:white;
+    border-radius:12px;
+    padding:15px;
+    border-left:4px solid var(--gold);
+    margin-top:14px;
+  }
+
+  .info-box h3{
+    margin:0 0 8px;
+    font-size:16px;
+  }
+
+  .empty{
+    color:#697586;
+    line-height:1.5;
+  }
+
+  .stat{
+    display:flex;
+    justify-content:space-between;
+    gap:10px;
+    padding:8px 0;
+    border-bottom:1px solid #e3e6ea;
+  }
+
+  .stat:last-child{border-bottom:0}
+
+  .legend{
+    margin-top:20px;
+    padding-top:16px;
+    border-top:1px solid #d8dce1;
+  }
+
+  .legend-item{
+    display:flex;
+    align-items:center;
+    gap:9px;
+    margin:7px 0;
+    font-size:13px;
+  }
+
+  .swatch{
+    width:18px;
+    height:18px;
+    border-radius:4px;
+    border:1px solid #344252;
+  }
+
+  .footer{
+    margin-top:14px;
+    color:#d5dce5;
+    font-size:12px;
+    line-height:1.5;
+  }
+
+  .instructions{
+    margin-top:18px;
+    background:rgba(255,255,255,.08);
+    color:#e8edf4;
+    padding:14px 16px;
+    border-radius:10px;
+    font-size:13px;
+  }
+
+  @media(max-width:900px){
+    .layout{grid-template-columns:1fr}
+    #map{height:560px}
+    .map-card{min-height:560px}
+  }
+</style>
+</head>
+
+<body>
+<div class="wrapper">
+
+  <div class="header">
+    <h1>Mapa interactivo de los departamentos de Francia</h1>
+    <p class="subtitle">
+      96 departamentos metropolitanos · base para las emisiones de ECUs y euros temporales (1992–1998)
+    </p>
+  </div>
+
+  <div class="layout">
+
+    <section class="map-card">
+      <svg id="map" role="img" aria-label="Mapa interactivo de los departamentos de Francia"></svg>
+      <div id="tooltip" class="tooltip"></div>
+    </section>
+
+    <aside class="panel">
+      <input id="search" class="search" type="search"
+             placeholder="Buscar departamento…">
+
+      <select id="departmentSelect" aria-label="Seleccionar departamento">
+        <option value="">Selecciona un departamento</option>
+      </select>
+
+      <div id="info">
+        <h2>Francia</h2>
+        <div class="code">96 DEPARTAMENTOS · <span id="mappedCount">0</span> CON EMISIONES INCORPORADAS</div>
+        <p class="empty">
+          Haz clic sobre un departamento del mapa para consultar sus emisiones.
+          Los departamentos con emisiones localizadas están marcados en dorado.
+          La ficha muestra las localidades, fechas y denominaciones incorporadas
+          a la investigación.
+        </p>
+      </div>
+
+      <div class="legend">
+        <strong>Leyenda</strong>
+        <div class="legend-item">
+          <span class="swatch" style="background:#86a9dc"></span>
+          Departamento
+        </div>
+        <div class="legend-item">
+          <span class="swatch" style="background:#c69a54"></span>
+          Departamento con emisiones localizadas
+        </div>
+        <div class="legend-item">
+          <span class="swatch" style="background:#c69a54"></span>
+          Departamento seleccionado
+        </div>
+      </div>
+
+      <div class="instructions">
+        <strong>Para Google Sites:</strong><br>
+        publica este archivo como página web (por ejemplo con GitHub Pages)
+        y después usa <em>Insertar → Insertar → URL</em> en Google Sites.
+      </div>
+    </aside>
+  </div>
+
+  <div class="footer">
+    Cartografía GeoJSON: proyecto france-geojson, basado en datos de IGN/INSEE.
+    El archivo utiliza la versión simplificada de los límites departamentales.
+  </div>
+</div>
+
+<script>
+/*
+  ============================================================
+  DATOS NUMISMÁTICOS
+  ============================================================
+  Aquí iremos incorporando las emisiones de cada departamento.
+
+  Ejemplo:
+  "61": {
+    localidades: ["Mortagne-au-Perche", "Vimoutiers"],
+    emisiones: [
+      {anio:"1996", localidad:"Mortagne-au-Perche", valores:"1 €, 3 €, 20 €, 450 €"},
+      {anio:"1997", localidad:"Vimoutiers", valores:"1 €, 2 €, 20 €"}
+    ]
+  }
+
+  Puedes modificar estos datos sin tocar el mapa.
+*/
+
+const numismaticData = {
+  /*
+    Añade aquí nuevos departamentos siguiendo este formato.
+    Cualquier departamento que tenga una entrada aparecerá
+    automáticamente en DORADO en el mapa.
+
+    Los datos siguientes incorporan las emisiones que ya hemos
+    trabajado en nuestra investigación.
+  */
+
+  "60": {
+    localidades: ["Beauvais", "Cires-lès-Mello", "Compiègne", "Crouy-en-Thelle", "Pont-Sainte-Maxence"],
+    emisiones: [
+      {anio:"1997", localidad:"Beauvais", valores:"1 €, 10 € y 20 €"},
+      {anio:"1998", localidad:"Cires-lès-Mello", valores:"Emisiones temporales de 1998"},
+      {anio:"1998", localidad:"Compiègne", valores:"Emisiones temporales de 1998"},
+      {anio:"1996–1997", localidad:"Crouy-en-Thelle", valores:"Emisiones temporales"},
+      {anio:"1997", localidad:"Pont-Sainte-Maxence", valores:"Emisiones temporales"}
+    ]
+  },
+
+  "53": {
+    localidades: ["Mayenne"],
+    emisiones: [
+      {anio:"1997", localidad:"Mayenne", valores:"Emisiones en euros temporales; piezas de 20 € dedicadas a distintos lugares del departamento"}
+    ]
+  },
+
+  "61": {
+    localidades: ["Mortagne-au-Perche", "Vimoutiers"],
+    emisiones: [
+      {anio:"1996", localidad:"Mortagne-au-Perche", valores:"1 €, 3 €, 20 € y 450 €"},
+      {anio:"1997", localidad:"Vimoutiers", valores:"1 €, 2 € y 20 €"}
+    ]
+  },
+
+  "71": {
+    localidades: ["Autun", "Chalon-sur-Saône", "Saint-Gengoux-le-National"],
+    emisiones: [
+      {anio:"1996", localidad:"Saint-Gengoux-le-National", valores:"Emisiones temporales"},
+      {anio:"1997", localidad:"Autun", valores:"Emisiones temporales"},
+      {anio:"1997", localidad:"Chalon-sur-Saône", valores:"Emisiones temporales"}
+    ]
+  }
+};
+
+/*
+  Fuente cartográfica:
+  https://github.com/gregoiredavid/france-geojson
+  Propiedades utilizadas: properties.code y properties.nom
+*/
+const mappedCount = document.getElementById("mappedCount");
+if (mappedCount) mappedCount.textContent = Object.keys(numismaticData).length;
+
+const GEOJSON_URL =
+  "https://raw.githubusercontent.com/gregoiredavid/france-geojson/master/departements-version-simplifiee.geojson";
+
+const svg = d3.select("#map");
+const tooltip = d3.select("#tooltip");
+const select = d3.select("#departmentSelect");
+const search = document.getElementById("search");
+const info = document.getElementById("info");
+
+let features = [];
+let path;
+
+function esc(text){
+  return String(text ?? "")
+    .replaceAll("&","&amp;")
+    .replaceAll("<","&lt;")
+    .replaceAll(">","&gt;")
+    .replaceAll('"',"&quot;");
+}
+
+function renderInfo(d){
+  const code = d.properties.code;
+  const name = d.properties.nom;
+  const data = numismaticData[code];
+
+  d3.selectAll(".dept").classed("selected", false);
+  d3.selectAll(".dept")
+    .filter(x => x && x.properties && x.properties.code === code)
+    .classed("selected", true);
+
+  if(!data){
+    info.innerHTML = `
+      <h2>${esc(name)}</h2>
+      <div class="code">DEPARTAMENTO ${esc(code)}</div>
+      <div class="info-box">
+        <h3>Información numismática</h3>
+        <p class="empty">
+          No hay todavía emisiones incorporadas para este departamento.
+          Los departamentos con emisiones localizadas aparecen en dorado.
+        </p>
+      </div>
+    `;
+    return;
+  }
+
+  const localities = (data.localidades || []).map(esc).join(", ") || "—";
+
+  let emissionsHtml = "";
+  if(data.emisiones && data.emisiones.length){
+    emissionsHtml = data.emisiones.map(e => `
+      <div class="stat">
+        <span><strong>${esc(e.anio)}</strong><br>${esc(e.localidad)}</span>
+        <span>${esc(e.valores)}</span>
+      </div>
+    `).join("");
+  }else{
+    emissionsHtml = `<p class="empty">Datos de emisiones pendientes de completar.</p>`;
+  }
+
+  info.innerHTML = `
+    <h2>${esc(name)}</h2>
+    <div class="code">DEPARTAMENTO ${esc(code)}</div>
+
+    <div class="info-box">
+      <h3>Localidades</h3>
+      <p>${localities}</p>
+    </div>
+
+    <div class="info-box">
+      <h3>Emisiones 1992–1998</h3>
+      ${emissionsHtml}
+    </div>
+  `;
+}
+
+function selectFeature(code){
+  const found = features.find(f => f.properties.code === code);
+  if(found){
+    select.property("value", code);
+    renderInfo(found);
+    const node = d3.selectAll(".dept")
+      .filter(d => d.properties.code === code)
+      .node();
+
+    if(node){
+      node.scrollIntoView({behavior:"smooth", block:"nearest"});
+    }
+  }
+}
+
+function setupMap(data){
+  features = data.features
+    .filter(f => {
+      const c = f.properties.code;
+      return c && (
+        /^[0-8][0-9]$/.test(c) ||
+        c === "2A" ||
+        c === "2B"
+      );
+    });
+
+  /*
+    Para el mapa histórico de 96 departamentos metropolitanos:
+    2A y 2B forman Córcega. En la numeración departamental moderna
+    se cuentan como dos departamentos, de modo que el conjunto es 96.
+  */
+
+  features.sort((a,b) =>
+    String(a.properties.code).localeCompare(
+      String(b.properties.code), "fr", {numeric:true}
+    )
+  );
+
+  const width = 1000;
+  const height = 700;
+
+  svg.attr("viewBox", `0 0 ${width} ${height}`);
+
+  const projection = d3.geoMercator();
+  projection.fitExtent([[35,25],[width-35,height-25]], {
+    type:"FeatureCollection",
+    features:features
+  });
+
+  path = d3.geoPath(projection);
+
+  const g = svg.append("g");
+
+  const shapes = g.selectAll("path")
+    .data(features)
+    .join("path")
+    .attr("class", d =>
+      "dept" + (numismaticData[d.properties.code] ? " has-data" : "")
+    )
+    .attr("d", path)
+    .on("mousemove", function(event,d){
+      tooltip
+        .style("display","block")
+        .style("left",(event.offsetX + 14) + "px")
+        .style("top",(event.offsetY + 14) + "px")
+        .html(`<strong>${esc(d.properties.code)}</strong> · ${esc(d.properties.nom)}`);
+    })
+    .on("mouseleave", () => tooltip.style("display","none"))
+    .on("click", (event,d) => {
+      event.stopPropagation();
+      renderInfo(d);
+      select.property("value", d.properties.code);
+    });
+
+  /*
+    Etiquetas de código departamental.
+    Para áreas muy pequeñas se mantiene el código centrado
+    en el centroide calculado por D3.
+  */
+  g.selectAll("text")
+    .data(features)
+    .join("text")
+    .attr("class","dept-label")
+    .attr("transform", d => {
+      const c = path.centroid(d);
+      return `translate(${c[0]},${c[1]})`;
+    })
+    .text(d => d.properties.code);
+
+  features.forEach(d => {
+    select.append("option")
+      .attr("value", d.properties.code)
+      .text(`${d.properties.code} — ${d.properties.nom}`);
+  });
+
+  search.addEventListener("input", function(){
+    const q = this.value.trim().toLowerCase();
+    if(!q) return;
+
+    const found = features.find(d =>
+      d.properties.nom.toLowerCase().includes(q) ||
+      d.properties.code.toLowerCase() === q
+    );
+
+    if(found) selectFeature(found.properties.code);
+  });
+
+  select.on("change", function(){
+    if(this.value) selectFeature(this.value);
+  });
+
+  window.addEventListener("resize", () => {
+    // El SVG usa viewBox, por lo que se adapta automáticamente.
+  });
+}
+
+fetch(GEOJSON_URL)
+  .then(response => {
+    if(!response.ok) throw new Error("No se pudo cargar el GeoJSON");
+    return response.json();
+  })
+  .then(setupMap)
+  .catch(error => {
+    console.error(error);
+    info.innerHTML = `
+      <h2>No se pudo cargar el mapa</h2>
+      <p class="empty">
+        Comprueba que el archivo se está abriendo desde un servidor web
+        y que tiene conexión a Internet. Google Sites no ejecuta directamente
+        un archivo HTML local.
+      </p>
+    `;
+  });
+</script>
+</body>
+</html>
