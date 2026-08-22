@@ -13,8 +13,11 @@
   --blue: #86a9dc;
   --blue-dark: #476b9d;
   --blue-light: #dbe7f7;
+
   --gold: #c69a54;
   --gold-dark: #8e672e;
+  --gold-light: #ead7b7;
+
   --ink: #182333;
   --white: #ffffff;
   --border: #c9d3e0;
@@ -28,7 +31,12 @@ body {
   margin: 0;
   font-family: Arial, Helvetica, sans-serif;
   background:
-    linear-gradient(135deg, #eef3f9 0%, #ffffff 50%, #e5edf7 100%);
+    linear-gradient(
+      135deg,
+      #eef3f9 0%,
+      #ffffff 50%,
+      #e5edf7 100%
+    );
   color: var(--ink);
 }
 
@@ -79,6 +87,7 @@ svg {
   stroke: #ffffff;
   stroke-width: 0.7px;
   cursor: pointer;
+
   transition:
     fill 0.2s ease,
     stroke 0.2s ease,
@@ -107,17 +116,26 @@ svg {
 
 #info-panel {
   display: none;
+
   position: absolute;
   top: 20px;
   right: 20px;
+
   width: min(360px, calc(100% - 40px));
   max-height: calc(100% - 40px);
+
   overflow-y: auto;
+
   background: rgba(255,255,255,0.98);
+
   border: 1px solid var(--border);
   border-radius: 16px;
-  box-shadow: 0 10px 35px rgba(20,40,70,0.22);
+
+  box-shadow:
+    0 10px 35px rgba(20,40,70,0.22);
+
   padding: 20px;
+
   z-index: 10;
 }
 
@@ -127,13 +145,19 @@ svg {
 
 #close-button {
   position: absolute;
+
   right: 12px;
   top: 10px;
+
   border: 0;
   background: transparent;
+
   color: #647386;
+
   font-size: 25px;
+
   cursor: pointer;
+
   line-height: 1;
 }
 
@@ -143,58 +167,76 @@ svg {
 
 #department-name {
   margin: 0 35px 5px 0;
+
   color: var(--blue-dark);
+
   font-size: 25px;
 }
 
 #department-code {
   color: #758396;
+
   font-size: 14px;
+
   margin-bottom: 14px;
 }
 
 #department-status {
   display: inline-block;
+
   padding: 6px 10px;
+
   border-radius: 20px;
+
   background: var(--blue-light);
   color: var(--blue-dark);
+
   font-size: 12px;
   font-weight: bold;
+
   margin-bottom: 15px;
 }
 
 #department-status.emitter-status {
-  background: #ead7b7;
+  background: var(--gold-light);
   color: var(--gold-dark);
 }
 
 .info-section {
   margin-top: 15px;
+
   padding-top: 15px;
+
   border-top: 1px solid #e1e6ed;
 }
 
 .info-section h3 {
   margin: 0 0 8px;
+
   color: #334960;
+
   font-size: 15px;
 }
 
 .info-section p {
   margin: 5px 0;
+
   line-height: 1.5;
+
   font-size: 14px;
 }
 
 .emission-list {
   margin: 0;
+
   padding-left: 18px;
 }
 
 .emission-list li {
   margin-bottom: 7px;
+
   line-height: 1.4;
+
   font-size: 14px;
 }
 
@@ -204,44 +246,68 @@ svg {
 
 #more-info-button {
   display: none;
+
   width: 100%;
+
   padding: 12px 16px;
+
   border: 0;
+
   border-radius: 10px;
+
   background: var(--gold);
+
   color: white;
+
   text-decoration: none;
+
   text-align: center;
+
   font-weight: bold;
+
   cursor: pointer;
-  transition: background 0.2s ease, transform 0.2s ease;
+
+  transition:
+    background 0.2s ease,
+    transform 0.2s ease;
 }
 
 #more-info-button:hover {
   background: var(--gold-dark);
+
   transform: translateY(-1px);
 }
 
 #legend {
   display: flex;
+
   justify-content: center;
+
   flex-wrap: wrap;
+
   gap: 18px;
+
   padding: 14px 15px 18px;
+
   color: #56677a;
+
   font-size: 13px;
 }
 
 .legend-item {
   display: flex;
+
   align-items: center;
+
   gap: 7px;
 }
 
 .legend-square {
   width: 17px;
   height: 17px;
+
   border-radius: 4px;
+
   border: 1px solid rgba(0,0,0,0.12);
 }
 
@@ -255,17 +321,24 @@ svg {
 
 #loading {
   min-height: 560px;
+
   display: flex;
+
   align-items: center;
   justify-content: center;
+
   color: #607086;
+
   font-size: 15px;
 }
 
 #error {
   display: none;
+
   padding: 30px;
+
   text-align: center;
+
   color: #8c3b3b;
 }
 
@@ -281,10 +354,14 @@ svg {
 
   #info-panel {
     position: relative;
+
     top: auto;
     right: auto;
+
     width: auto;
+
     margin: 10px;
+
     max-height: none;
   }
 
@@ -299,7 +376,9 @@ svg {
 
 <div id="map-wrapper">
 
-  <h1 id="title">ECUs y euros temporales de Francia</h1>
+  <h1 id="title">
+    ECUs y euros temporales de Francia
+  </h1>
 
   <p id="subtitle">
     Mapa interactivo de los 96 departamentos franceses
@@ -319,7 +398,13 @@ svg {
 
     <div id="info-panel">
 
-      <button id="close-button" title="Cerrar">×</button>
+      <button
+        id="close-button"
+        title="Cerrar"
+        aria-label="Cerrar"
+      >
+        ×
+      </button>
 
       <h2 id="department-name"></h2>
 
@@ -328,16 +413,33 @@ svg {
       <div id="department-status"></div>
 
       <div class="info-section">
-        <h3>Información</h3>
+
+        <h3>
+          Información
+        </h3>
+
         <p id="department-description"></p>
+
       </div>
 
-      <div class="info-section" id="emissions-section">
-        <h3>Emisiones de ECUs / euros temporales</h3>
-        <ul id="emission-list" class="emission-list"></ul>
+      <div
+        class="info-section"
+        id="emissions-section"
+      >
+
+        <h3>
+          Emisiones de ECUs / euros temporales
+        </h3>
+
+        <ul
+          id="emission-list"
+          class="emission-list"
+        ></ul>
+
       </div>
 
       <div id="more-info-container">
+
         <a
           id="more-info-button"
           href="#"
@@ -346,6 +448,7 @@ svg {
         >
           Más información
         </a>
+
       </div>
 
     </div>
@@ -355,13 +458,27 @@ svg {
   <div id="legend">
 
     <div class="legend-item">
-      <span class="legend-square legend-blue"></span>
-      <span>Departamento</span>
+
+      <span
+        class="legend-square legend-blue"
+      ></span>
+
+      <span>
+        Departamento
+      </span>
+
     </div>
 
     <div class="legend-item">
-      <span class="legend-square legend-gold"></span>
-      <span>Departamento con emisión registrada</span>
+
+      <span
+        class="legend-square legend-gold"
+      ></span>
+
+      <span>
+        Departamento con información registrada
+      </span>
+
     </div>
 
   </div>
@@ -405,8 +522,10 @@ const departments = {
   "27": "Eure",
   "28": "Eure-et-Loir",
   "29": "Finistère",
+
   "2A": "Corse-du-Sud",
   "2B": "Haute-Corse",
+
   "30": "Gard",
   "31": "Haute-Garonne",
   "32": "Gers",
@@ -481,14 +600,14 @@ const departments = {
    2. ENLACES A GOOGLE SITES
    =========================================================
 
-   AQUÍ PUEDES PEGAR LAS URL DE TUS PÁGINAS.
+   Cuando tengas una página para un departamento,
+   sustituye "" por su URL.
 
    Ejemplo:
 
-   "61": "https://sites.google.com/view/tu-pagina/orne",
+   "61": "https://sites.google.com/view/tu-pagina/orne"
 
-   Si una URL está vacía ("") NO aparecerá el botón
-   «Más información» para ese departamento.
+   El botón «Más información» aparecerá automáticamente.
    ========================================================= */
 
 const departmentLinks = {
@@ -594,67 +713,135 @@ const departmentLinks = {
 
 
 /* =========================================================
-   3. INFORMACIÓN DE LAS EMISIONES
+   3. INFORMACIÓN HISTÓRICA DE LOS DEPARTAMENTOS
    =========================================================
 
-   AQUÍ SE PUEDEN INTRODUCIR LAS LOCALIDADES, FECHAS,
-   DENOMINACIONES Y OTROS DATOS DE CADA DEPARTAMENTO.
+   IMPORTANTE:
 
-   Dejo inicialmente los datos vacíos para no inventar
-   información histórica.
+   Si un departamento aparece aquí, automáticamente
+   aparecerá en DORADO en el mapa.
+
+   Para añadir un nuevo departamento simplemente
+   añadiremos su código en este objeto.
    ========================================================= */
 
-const departmentData = {};
+const departmentData = {
+
+  /* -------------------------------------------------------
+     OISE — 60
+     ------------------------------------------------------- */
+
+  "60": {
+
+    description:
+      "El departamento de Oise cuenta con emisiones de ECUs y euros temporales registradas durante la década de 1990.",
+
+    emissions: [
+
+      {
+        locality: "Beauvais",
+        dates: "1997",
+        denominations:
+          "1 euro, 10 euros y 20 euros"
+      },
+
+      {
+        locality: "Cires-lès-Mello",
+        dates: "22 – 28 de junio de 1998",
+        denominations:
+          "Euros temporales"
+      },
+
+      {
+        locality: "Compiègne",
+        dates: "2 – 20 de junio de 1998",
+        denominations:
+          "Euros temporales"
+      },
+
+      {
+        locality: "Crouy-en-Thelle",
+        dates: "1996 – 1997",
+        denominations:
+          "ECUs / euros temporales"
+      },
+
+      {
+        locality: "Pont-Sainte-Maxence",
+        dates: "Década de 1990",
+        denominations:
+          "ECUs / euros temporales"
+      }
+
+    ]
+
+  },
+
+
+  /* -------------------------------------------------------
+     ORNE — 61
+     ------------------------------------------------------- */
+
+  "61": {
+
+    description:
+      "El departamento de Orne cuenta con varias emisiones de ECUs y euros temporales realizadas en distintas localidades durante los años 1996 y 1997.",
+
+    emissions: [
+
+      {
+        locality: "Mortagne-au-Perche",
+        dates: "29 de octubre – 9 de noviembre de 1996",
+        denominations:
+          "1, 3, 20 y 450 euros"
+      },
+
+      {
+        locality: "Vimoutiers",
+        dates: "29 de marzo – 13 de abril de 1997",
+        denominations:
+          "1, 2 y 20 euros"
+      }
+
+    ]
+
+  }
+
+};
 
 
 /* =========================================================
-   EJEMPLO DE ESTRUCTURA PARA AÑADIR INFORMACIÓN
+   4. DETERMINAR AUTOMÁTICAMENTE LOS DEPARTAMENTOS
+   CON INFORMACIÓN
    =========================================================
 
-   Por ejemplo:
+   Ya NO es necesario escribir manualmente una lista
+   de departamentos emisores.
 
-   "61": {
-      description:
-        "Departamento de Orne.",
-      emissions: [
-        {
-          locality: "Vimoutiers",
-          dates: "29 de marzo – 13 de abril de 1997",
-          denominations: "1, 2 y 20 euros"
-        },
-        {
-          locality: "Mortagne-au-Perche",
-          dates: "29 de octubre – 9 de noviembre de 1996",
-          denominations: "1, 3, 20 y 450 euros"
-        }
-      ]
-   }
+   El sistema comprueba automáticamente qué códigos
+   existen en departmentData.
 
+   Por tanto:
+
+   departmentData["61"]  → Orne aparece dorado.
+
+   departmentData["60"]  → Oise aparece dorado.
+
+   Si posteriormente añadimos:
+
+   departmentData["71"]
+
+   Saône-et-Loire aparecerá automáticamente dorado.
    ========================================================= */
+
+const emittingDepartments =
+  new Set(
+    Object.keys(departmentData)
+  );
 
 
 /* =========================================================
-   4. DEPARTAMENTOS QUE APARECEN EN DORADO
-   =========================================================
-
-   Introduce aquí los códigos de los departamentos que
-   quieras destacar como emisores.
-
-   Ejemplo:
-
-   const emittingDepartments = new Set([
-      "61",
-      "60",
-      "71"
-   ]);
-
-   ========================================================= */
-
-const emittingDepartments = new Set([]);
-
-
-/* =========================================================
-   5. CARGAR GEOJSON DE LOS 96 DEPARTAMENTOS
+   5. GEOJSON DE LOS 96 DEPARTAMENTOS
    ========================================================= */
 
 const geoJsonURL =
@@ -706,49 +893,78 @@ const moreInfoButton =
    7. CERRAR PANEL
    ========================================================= */
 
-closeButton.addEventListener("click", () => {
+closeButton.addEventListener(
+  "click",
+  () => {
 
-  infoPanel.classList.remove("visible");
+    infoPanel.classList.remove(
+      "visible"
+    );
 
-  document
-    .querySelectorAll(".department.selected")
-    .forEach(element => {
-      element.classList.remove("selected");
-    });
+    document
+      .querySelectorAll(".department.selected")
+      .forEach(element => {
 
-});
+        element.classList.remove(
+          "selected"
+        );
+
+      });
+
+  }
+);
 
 
 /* =========================================================
-   8. MOSTRAR INFORMACIÓN DE UN DEPARTAMENTO
+   8. MOSTRAR INFORMACIÓN
    ========================================================= */
 
-function showDepartment(code, name, element) {
+function showDepartment(
+  code,
+  name,
+  element
+) {
 
   document
     .querySelectorAll(".department.selected")
     .forEach(el => {
-      el.classList.remove("selected");
+
+      el.classList.remove(
+        "selected"
+      );
+
     });
 
-  element.classList.add("selected");
+
+  element.classList.add(
+    "selected"
+  );
+
 
   const data =
     departmentData[code] || {};
 
+
   const hasEmission =
     emittingDepartments.has(code);
+
 
   departmentName.textContent =
     name || "Departamento";
 
+
   departmentCode.textContent =
     "Código: " + code;
+
+
+  /* -------------------------------------------------------
+     ESTADO DEL DEPARTAMENTO
+     ------------------------------------------------------- */
 
   if (hasEmission) {
 
     departmentStatus.textContent =
-      "EMISIÓN REGISTRADA";
+      "INFORMACIÓN REGISTRADA";
 
     departmentStatus.classList.add(
       "emitter-status"
@@ -766,56 +982,96 @@ function showDepartment(code, name, element) {
   }
 
 
-  /* Descripción */
+  /* -------------------------------------------------------
+     DESCRIPCIÓN
+     ------------------------------------------------------- */
 
   departmentDescription.textContent =
     data.description ||
-    "Información histórica sobre los ECUs y euros temporales de este departamento.";
+    "Actualmente no hay información histórica incorporada para este departamento.";
 
 
-  /* Emisiones */
+  /* -------------------------------------------------------
+     EMISIONES
+     ------------------------------------------------------- */
 
   emissionList.innerHTML = "";
+
 
   const emissions =
     data.emissions || [];
 
-  if (emissions.length > 0) {
+
+  if (
+    emissions.length > 0
+  ) {
 
     emissionSection.style.display =
       "block";
 
-    emissions.forEach(emission => {
 
-      const li =
-        document.createElement("li");
+    emissions.forEach(
+      emission => {
 
-      let text = "";
+        const li =
+          document.createElement(
+            "li"
+          );
 
-      if (emission.locality) {
-        text +=
-          "<strong>" +
-          escapeHTML(emission.locality) +
-          "</strong>";
+
+        let text = "";
+
+
+        if (
+          emission.locality
+        ) {
+
+          text +=
+            "<strong>" +
+            escapeHTML(
+              emission.locality
+            ) +
+            "</strong>";
+
+        }
+
+
+        if (
+          emission.dates
+        ) {
+
+          text +=
+            " — " +
+            escapeHTML(
+              emission.dates
+            );
+
+        }
+
+
+        if (
+          emission.denominations
+        ) {
+
+          text +=
+            " — " +
+            escapeHTML(
+              emission.denominations
+            );
+
+        }
+
+
+        li.innerHTML =
+          text;
+
+
+        emissionList.appendChild(
+          li
+        );
+
       }
-
-      if (emission.dates) {
-        text +=
-          " — " +
-          escapeHTML(emission.dates);
-      }
-
-      if (emission.denominations) {
-        text +=
-          " — " +
-          escapeHTML(emission.denominations);
-      }
-
-      li.innerHTML = text;
-
-      emissionList.appendChild(li);
-
-    });
+    );
 
   } else {
 
@@ -825,10 +1081,13 @@ function showDepartment(code, name, element) {
   }
 
 
-  /* Botón Más información */
+  /* -------------------------------------------------------
+     BOTÓN MÁS INFORMACIÓN
+     ------------------------------------------------------- */
 
   const url =
     departmentLinks[code];
+
 
   if (
     url &&
@@ -839,12 +1098,16 @@ function showDepartment(code, name, element) {
     moreInfoButton.href =
       url.trim();
 
+
     moreInfoButton.style.display =
       "block";
 
   } else {
 
-    moreInfoButton.removeAttribute("href");
+    moreInfoButton.removeAttribute(
+      "href"
+    );
+
 
     moreInfoButton.style.display =
       "none";
@@ -852,29 +1115,51 @@ function showDepartment(code, name, element) {
   }
 
 
-  infoPanel.classList.add("visible");
+  infoPanel.classList.add(
+    "visible"
+  );
 
 }
 
 
 /* =========================================================
-   9. PROTEGER EL TEXTO MOSTRADO EN HTML
+   9. PROTEGER TEXTO HTML
    ========================================================= */
 
 function escapeHTML(value) {
 
   return String(value)
-    .replace(/&/g, "&amp;")
-    .replace(/</g, "&lt;")
-    .replace(/>/g, "&gt;")
-    .replace(/"/g, "&quot;")
-    .replace(/'/g, "&#039;");
+
+    .replace(
+      /&/g,
+      "&amp;"
+    )
+
+    .replace(
+      /</g,
+      "&lt;"
+    )
+
+    .replace(
+      />/g,
+      "&gt;"
+    )
+
+    .replace(
+      /"/g,
+      "&quot;"
+    )
+
+    .replace(
+      /'/g,
+      "&#039;"
+    );
 
 }
 
 
 /* =========================================================
-   10. CREAR EL MAPA
+   10. CREAR MAPA
    ========================================================= */
 
 async function createMap() {
@@ -882,13 +1167,21 @@ async function createMap() {
   try {
 
     const response =
-      await fetch(geoJsonURL);
+      await fetch(
+        geoJsonURL
+      );
 
-    if (!response.ok) {
+
+    if (
+      !response.ok
+    ) {
+
       throw new Error(
         "No se pudo descargar el GeoJSON."
       );
+
     }
+
 
     const geojson =
       await response.json();
@@ -906,106 +1199,191 @@ async function createMap() {
 
 
     const svg =
-      d3.select("#map")
+      d3
+        .select("#map")
         .append("svg")
-        .attr("viewBox",
+
+        .attr(
+          "viewBox",
           `0 0 ${width} ${height}`
         )
-        .attr("preserveAspectRatio",
+
+        .attr(
+          "preserveAspectRatio",
           "xMidYMid meet"
         );
 
 
-    /* Proyección de Francia */
+    /* -------------------------------------------------------
+       PROYECCIÓN DE FRANCIA
+       ------------------------------------------------------- */
 
     const projection =
-      d3.geoConicConformal()
-        .parallels([44, 49])
-        .rotate([0, 0])
-        .center([2.5, 46.5])
+      d3
+        .geoConicConformal()
+
+        .parallels(
+          [44, 49]
+        )
+
+        .rotate(
+          [0, 0]
+        )
+
+        .center(
+          [2.5, 46.5]
+        )
+
         .fitSize(
-          [width - 70, height - 70],
+          [
+            width - 70,
+            height - 70
+          ],
           geojson
         );
 
 
     const path =
-      d3.geoPath()
-        .projection(projection);
+      d3
+        .geoPath()
+        .projection(
+          projection
+        );
 
 
-    /* Grupo principal */
+    /* -------------------------------------------------------
+       GRUPO PRINCIPAL
+       ------------------------------------------------------- */
 
     const mapGroup =
       svg.append("g");
 
 
-    /* Departamentos */
+    /* -------------------------------------------------------
+       DEPARTAMENTOS
+       ------------------------------------------------------- */
 
     mapGroup
-      .selectAll(".department")
-      .data(geojson.features)
-      .join("path")
-      .attr("class", feature => {
 
-        const code =
-          getDepartmentCode(feature);
-
-        return emittingDepartments.has(code)
-          ? "department emitter"
-          : "department";
-
-      })
-      .attr("d", path)
-      .attr("data-code", feature =>
-        getDepartmentCode(feature)
+      .selectAll(
+        ".department"
       )
-      .on("click", function(event, feature) {
 
-        event.stopPropagation();
+      .data(
+        geojson.features
+      )
 
-        const code =
-          getDepartmentCode(feature);
+      .join("path")
 
-        const name =
-          departments[code] ||
-          feature.properties.nom ||
-          "Departamento";
+      .attr(
+        "class",
+        feature => {
 
-        showDepartment(
-          code,
-          name,
-          this
-        );
-
-      });
+          const code =
+            getDepartmentCode(
+              feature
+            );
 
 
-    /* Click fuera del mapa */
+          return emittingDepartments.has(
+            code
+          )
 
-    svg.on("click", function() {
+            ? "department emitter"
 
-      infoPanel.classList.remove(
-        "visible"
+            : "department";
+
+        }
+      )
+
+      .attr(
+        "d",
+        path
+      )
+
+      .attr(
+        "data-code",
+        feature =>
+          getDepartmentCode(
+            feature
+          )
+      )
+
+      .on(
+        "click",
+        function(
+          event,
+          feature
+        ) {
+
+          event.stopPropagation();
+
+
+          const code =
+            getDepartmentCode(
+              feature
+            );
+
+
+          const name =
+            departments[code] ||
+
+            feature.properties?.nom ||
+
+            "Departamento";
+
+
+          showDepartment(
+            code,
+            name,
+            this
+          );
+
+        }
       );
 
-      document
-        .querySelectorAll(".department.selected")
-        .forEach(element => {
-          element.classList.remove(
-            "selected"
-          );
-        });
 
-    });
+    /* -------------------------------------------------------
+       CLIC FUERA DEL MAPA
+       ------------------------------------------------------- */
+
+    svg.on(
+      "click",
+      function() {
+
+        infoPanel.classList.remove(
+          "visible"
+        );
+
+
+        document
+          .querySelectorAll(
+            ".department.selected"
+          )
+          .forEach(
+            element => {
+
+              element.classList.remove(
+                "selected"
+              );
+
+            }
+          );
+
+      }
+    );
 
 
   } catch (error) {
 
-    console.error(error);
+    console.error(
+      error
+    );
+
 
     loadingElement.style.display =
       "none";
+
 
     errorElement.style.display =
       "block";
@@ -1019,38 +1397,62 @@ async function createMap() {
    11. OBTENER CÓDIGO DEL DEPARTAMENTO
    ========================================================= */
 
-function getDepartmentCode(feature) {
+function getDepartmentCode(
+  feature
+) {
 
   const properties =
     feature.properties || {};
 
+
   let code =
+
     properties.code ||
+
     properties.CODE_DEPT ||
+
     properties.code_dept ||
+
     properties.dep ||
+
     properties.id ||
+
     "";
 
+
   code =
-    String(code).toUpperCase();
+    String(code)
+      .trim()
+      .toUpperCase();
 
-  /*
-   * Algunos GeoJSON pueden proporcionar
-   * 2A / 2B como códigos correctos.
-   */
 
-  if (code === "2A") {
+  /* -------------------------------------------------------
+     CORSE
+     ------------------------------------------------------- */
+
+  if (
+    code === "2A" ||
+    code === "2A0"
+  ) {
+
     return "2A";
+
   }
 
-  if (code === "2B") {
+
+  if (
+    code === "2B" ||
+    code === "2B0"
+  ) {
+
     return "2B";
+
   }
 
-  /*
-   * Normalización de códigos numéricos.
-   */
+
+  /* -------------------------------------------------------
+     CÓDIGOS NUMÉRICOS
+     ------------------------------------------------------- */
 
   if (
     /^\d+$/.test(code) &&
@@ -1062,13 +1464,14 @@ function getDepartmentCode(feature) {
 
   }
 
+
   return code;
 
 }
 
 
 /* =========================================================
-   12. INICIAR
+   12. INICIAR MAPA
    ========================================================= */
 
 createMap();
