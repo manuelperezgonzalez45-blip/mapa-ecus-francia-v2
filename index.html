@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
+
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
@@ -9,6 +10,7 @@
 <script src="https://cdn.jsdelivr.net/npm/d3@7"></script>
 
 <style>
+
 :root {
   --blue: #86a9dc;
   --blue-dark: #476b9d;
@@ -29,7 +31,12 @@
 
 body {
   margin: 0;
-  font-family: Arial, Helvetica, sans-serif;
+
+  font-family:
+    Arial,
+    Helvetica,
+    sans-serif;
+
   background:
     linear-gradient(
       135deg,
@@ -37,55 +44,112 @@ body {
       #ffffff 50%,
       #e5edf7 100%
     );
+
   color: var(--ink);
 }
 
 #map-wrapper {
   width: 100%;
   max-width: 1200px;
+
   margin: 0 auto;
+
   padding: 20px;
 }
 
 #title {
   text-align: center;
+
   margin-bottom: 8px;
+
   color: var(--blue-dark);
-  font-size: clamp(22px, 4vw, 34px);
+
+  font-size:
+    clamp(
+      22px,
+      4vw,
+      34px
+    );
+
   font-weight: 700;
 }
 
 #subtitle {
   text-align: center;
-  margin: 0 0 18px;
+
+  margin:
+    0 0 18px;
+
   color: #5d6c7d;
+
   font-size: 15px;
 }
 
+
+/* =========================================================
+   CONTENEDOR PRINCIPAL
+   ========================================================= */
+
 #map-container {
   position: relative;
-  background: rgba(255,255,255,0.92);
-  border: 1px solid var(--border);
+
+  background:
+    rgba(
+      255,
+      255,
+      255,
+      0.92
+    );
+
+  border:
+    1px solid
+    var(--border);
+
   border-radius: 18px;
-  box-shadow: 0 8px 30px rgba(30,55,90,0.12);
+
+  box-shadow:
+    0 8px 30px
+    rgba(
+      30,
+      55,
+      90,
+      0.12
+    );
+
   overflow: hidden;
 }
 
+
+/* =========================================================
+   MAPA METROPOLITANO
+   ========================================================= */
+
 #map {
   width: 100%;
+
   min-height: 560px;
 }
 
 svg {
   display: block;
+
   width: 100%;
+
   height: auto;
 }
 
+
+/* =========================================================
+   DEPARTAMENTOS
+   ========================================================= */
+
 .department {
   fill: var(--blue);
+
   stroke: #ffffff;
+
   stroke-width: 0.7px;
+
   cursor: pointer;
 
   transition:
@@ -97,7 +161,9 @@ svg {
 
 .department:hover {
   fill: #668fc8;
+
   stroke: #ffffff;
+
   stroke-width: 1.8px;
 }
 
@@ -111,28 +177,200 @@ svg {
 
 .department.selected {
   stroke: #172334;
+
   stroke-width: 2.5px;
 }
 
+
+/* =========================================================
+   DEPARTAMENTOS DE ULTRAMAR
+   ========================================================= */
+
+#overseas-section {
+
+  padding:
+    20px 20px 25px;
+
+  border-top:
+    1px solid
+    #e1e6ed;
+}
+
+#overseas-title {
+
+  margin:
+    0 0 5px;
+
+  text-align: center;
+
+  color:
+    var(--blue-dark);
+
+  font-size: 21px;
+}
+
+#overseas-subtitle {
+
+  margin:
+    0 0 18px;
+
+  text-align: center;
+
+  color:
+    #6a7889;
+
+  font-size: 13px;
+}
+
+#overseas-maps {
+
+  display: grid;
+
+  grid-template-columns:
+    repeat(
+      5,
+      1fr
+    );
+
+  gap: 12px;
+}
+
+.overseas-map {
+
+  min-width: 0;
+
+  background:
+    rgba(
+      247,
+      250,
+      253,
+      0.95
+    );
+
+  border:
+    1px solid
+    var(--border);
+
+  border-radius: 12px;
+
+  overflow: hidden;
+
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.overseas-map:hover {
+
+  transform:
+    translateY(-2px);
+
+  box-shadow:
+    0 5px 18px
+    rgba(
+      30,
+      55,
+      90,
+      0.13
+    );
+}
+
+.overseas-name {
+
+  margin: 0;
+
+  padding:
+    10px 5px 2px;
+
+  text-align: center;
+
+  color:
+    var(--blue-dark);
+
+  font-size: 14px;
+
+  font-weight: bold;
+}
+
+.overseas-code {
+
+  padding:
+    0 5px 5px;
+
+  text-align: center;
+
+  color:
+    #7b8796;
+
+  font-size: 11px;
+}
+
+.overseas-svg {
+
+  width: 100%;
+
+  min-height: 145px;
+}
+
+.overseas-svg svg {
+
+  width: 100%;
+
+  height: 145px;
+}
+
+
+/* =========================================================
+   PANEL DE INFORMACIÓN
+   ========================================================= */
+
 #info-panel {
+
   display: none;
 
   position: absolute;
+
   top: 20px;
+
   right: 20px;
 
-  width: min(360px, calc(100% - 40px));
-  max-height: calc(100% - 40px);
+  width:
+    min(
+      360px,
+      calc(
+        100% - 40px
+      )
+    );
+
+  max-height:
+    calc(
+      100% - 40px
+    );
 
   overflow-y: auto;
 
-  background: rgba(255,255,255,0.98);
+  background:
+    rgba(
+      255,
+      255,
+      255,
+      0.98
+    );
 
-  border: 1px solid var(--border);
+  border:
+    1px solid
+    var(--border);
+
   border-radius: 16px;
 
   box-shadow:
-    0 10px 35px rgba(20,40,70,0.22);
+    0 10px 35px
+    rgba(
+      20,
+      40,
+      70,
+      0.22
+    );
 
   padding: 20px;
 
@@ -144,15 +382,20 @@ svg {
 }
 
 #close-button {
+
   position: absolute;
 
   right: 12px;
+
   top: 10px;
 
   border: 0;
-  background: transparent;
 
-  color: #647386;
+  background:
+    transparent;
+
+  color:
+    #647386;
 
   font-size: 25px;
 
@@ -166,15 +409,20 @@ svg {
 }
 
 #department-name {
-  margin: 0 35px 5px 0;
 
-  color: var(--blue-dark);
+  margin:
+    0 35px 5px 0;
+
+  color:
+    var(--blue-dark);
 
   font-size: 25px;
 }
 
 #department-code {
-  color: #758396;
+
+  color:
+    #758396;
 
   font-size: 14px;
 
@@ -182,44 +430,62 @@ svg {
 }
 
 #department-status {
+
   display: inline-block;
 
-  padding: 6px 10px;
+  padding:
+    6px 10px;
 
   border-radius: 20px;
 
-  background: var(--blue-light);
-  color: var(--blue-dark);
+  background:
+    var(--blue-light);
+
+  color:
+    var(--blue-dark);
 
   font-size: 12px;
+
   font-weight: bold;
 
   margin-bottom: 15px;
 }
 
 #department-status.emitter-status {
-  background: var(--gold-light);
-  color: var(--gold-dark);
+
+  background:
+    var(--gold-light);
+
+  color:
+    var(--gold-dark);
 }
 
 .info-section {
+
   margin-top: 15px;
 
   padding-top: 15px;
 
-  border-top: 1px solid #e1e6ed;
+  border-top:
+    1px solid
+    #e1e6ed;
 }
 
 .info-section h3 {
-  margin: 0 0 8px;
 
-  color: #334960;
+  margin:
+    0 0 8px;
+
+  color:
+    #334960;
 
   font-size: 15px;
 }
 
 .info-section p {
-  margin: 5px 0;
+
+  margin:
+    5px 0;
 
   line-height: 1.5;
 
@@ -227,12 +493,14 @@ svg {
 }
 
 .emission-list {
+
   margin: 0;
 
   padding-left: 18px;
 }
 
 .emission-list li {
+
   margin-bottom: 7px;
 
   line-height: 1.4;
@@ -240,22 +508,30 @@ svg {
   font-size: 14px;
 }
 
+
+/* =========================================================
+   BOTÓN MÁS INFORMACIÓN
+   ========================================================= */
+
 #more-info-container {
   margin-top: 18px;
 }
 
 #more-info-button {
+
   display: none;
 
   width: 100%;
 
-  padding: 12px 16px;
+  padding:
+    12px 16px;
 
   border: 0;
 
   border-radius: 10px;
 
-  background: var(--gold);
+  background:
+    var(--gold);
 
   color: white;
 
@@ -273,12 +549,21 @@ svg {
 }
 
 #more-info-button:hover {
-  background: var(--gold-dark);
 
-  transform: translateY(-1px);
+  background:
+    var(--gold-dark);
+
+  transform:
+    translateY(-1px);
 }
 
+
+/* =========================================================
+   LEYENDA
+   ========================================================= */
+
 #legend {
+
   display: flex;
 
   justify-content: center;
@@ -287,14 +572,17 @@ svg {
 
   gap: 18px;
 
-  padding: 14px 15px 18px;
+  padding:
+    14px 15px 18px;
 
-  color: #56677a;
+  color:
+    #56677a;
 
   font-size: 13px;
 }
 
 .legend-item {
+
   display: flex;
 
   align-items: center;
@@ -303,59 +591,102 @@ svg {
 }
 
 .legend-square {
+
   width: 17px;
+
   height: 17px;
 
   border-radius: 4px;
 
-  border: 1px solid rgba(0,0,0,0.12);
+  border:
+    1px solid
+    rgba(
+      0,
+      0,
+      0,
+      0.12
+    );
 }
 
 .legend-blue {
-  background: var(--blue);
+  background:
+    var(--blue);
 }
 
 .legend-gold {
-  background: var(--gold);
+  background:
+    var(--gold);
 }
 
+
+/* =========================================================
+   CARGANDO / ERROR
+   ========================================================= */
+
 #loading {
+
   min-height: 560px;
 
   display: flex;
 
   align-items: center;
+
   justify-content: center;
 
-  color: #607086;
+  color:
+    #607086;
 
   font-size: 15px;
 }
 
 #error {
+
   display: none;
 
   padding: 30px;
 
   text-align: center;
 
-  color: #8c3b3b;
+  color:
+    #8c3b3b;
+}
+
+
+/* =========================================================
+   RESPONSIVE
+   ========================================================= */
+
+@media (max-width: 900px) {
+
+  #overseas-maps {
+
+    grid-template-columns:
+      repeat(
+        3,
+        1fr
+      );
+  }
+
 }
 
 @media (max-width: 700px) {
 
   #map-wrapper {
+
     padding: 8px;
   }
 
   #map {
+
     min-height: 430px;
   }
 
   #info-panel {
+
     position: relative;
 
     top: auto;
+
     right: auto;
 
     width: auto;
@@ -366,37 +697,97 @@ svg {
   }
 
   #loading {
+
     min-height: 430px;
   }
+
+  #overseas-maps {
+
+    grid-template-columns:
+      repeat(
+        2,
+        1fr
+      );
+  }
+
 }
+
+@media (max-width: 450px) {
+
+  #overseas-maps {
+
+    grid-template-columns:
+      1fr;
+  }
+
+}
+
 </style>
+
 </head>
+
 
 <body>
 
+
 <div id="map-wrapper">
+
 
   <h1 id="title">
     ECUs y euros temporales de Francia
   </h1>
 
+
   <p id="subtitle">
-    Mapa interactivo de los 96 departamentos franceses
+    Mapa interactivo de los 96 departamentos metropolitanos y los 5 departamentos de ultramar
   </p>
 
+
   <div id="map-container">
+
+
+    <!-- =====================================================
+         MAPA METROPOLITANO
+         ===================================================== -->
 
     <div id="loading">
       Cargando mapa de Francia...
     </div>
 
+
     <div id="error">
       No se ha podido cargar el mapa de Francia.
     </div>
 
+
     <div id="map"></div>
 
+
+    <!-- =====================================================
+         DEPARTAMENTOS DE ULTRAMAR
+         ===================================================== -->
+
+    <section id="overseas-section">
+
+      <h2 id="overseas-title">
+        Departamentos de ultramar
+      </h2>
+
+      <p id="overseas-subtitle">
+        Francia de ultramar · códigos 971, 972, 973, 974 y 976
+      </p>
+
+      <div id="overseas-maps"></div>
+
+    </section>
+
+
+    <!-- =====================================================
+         PANEL DE INFORMACIÓN
+         ===================================================== -->
+
     <div id="info-panel">
+
 
       <button
         id="close-button"
@@ -406,11 +797,15 @@ svg {
         ×
       </button>
 
+
       <h2 id="department-name"></h2>
+
 
       <div id="department-code"></div>
 
+
       <div id="department-status"></div>
+
 
       <div class="info-section">
 
@@ -421,6 +816,7 @@ svg {
         <p id="department-description"></p>
 
       </div>
+
 
       <div
         class="info-section"
@@ -438,6 +834,7 @@ svg {
 
       </div>
 
+
       <div id="more-info-container">
 
         <a
@@ -451,11 +848,19 @@ svg {
 
       </div>
 
+
     </div>
+
 
   </div>
 
+
+  <!-- =======================================================
+       LEYENDA
+       ======================================================= -->
+
   <div id="legend">
+
 
     <div class="legend-item">
 
@@ -469,6 +874,7 @@ svg {
 
     </div>
 
+
     <div class="legend-item">
 
       <span
@@ -481,12 +887,15 @@ svg {
 
     </div>
 
+
   </div>
+
 
 </div>
 
 
 <script>
+
 
 /* =========================================================
    1. DEPARTAMENTOS DE FRANCIA
@@ -513,6 +922,7 @@ const departments = {
   "17": "Charente-Maritime",
   "18": "Cher",
   "19": "Corrèze",
+
   "21": "Côte-d'Or",
   "22": "Côtes-d'Armor",
   "23": "Creuse",
@@ -591,23 +1001,24 @@ const departments = {
   "92": "Hauts-de-Seine",
   "93": "Seine-Saint-Denis",
   "94": "Val-de-Marne",
-  "95": "Val-d'Oise"
+  "95": "Val-d'Oise",
+
+
+  /* =======================================================
+     DEPARTAMENTOS DE ULTRAMAR
+     ======================================================= */
+
+  "971": "Guadeloupe",
+  "972": "Martinique",
+  "973": "Guyane",
+  "974": "La Réunion",
+  "976": "Mayotte"
 
 };
 
 
 /* =========================================================
    2. ENLACES A GOOGLE SITES
-   =========================================================
-
-   Cuando tengas una página para un departamento,
-   sustituye "" por su URL.
-
-   Ejemplo:
-
-   "61": "https://sites.google.com/view/tu-pagina/orne"
-
-   El botón «Más información» aparecerá automáticamente.
    ========================================================= */
 
 const departmentLinks = {
@@ -672,7 +1083,10 @@ const departmentLinks = {
   "57": "",
   "58": "",
   "59": "",
-  "60": "https://sites.google.com/view/conocetumoneda-euro/ecueuro/francia/departamentos/alta-francia/oise?authuser=",
+
+  "60":
+    "https://sites.google.com/view/conocetumoneda-euro/ecueuro/francia/departamentos/alta-francia/oise?authuser=",
+
   "61": "",
   "62": "",
   "63": "",
@@ -707,29 +1121,32 @@ const departmentLinks = {
   "92": "",
   "93": "",
   "94": "",
-  "95": ""
+  "95": "",
+
+
+  /* =======================================================
+     ENLACES DE ULTRAMAR
+     ======================================================= */
+
+  "971": "",
+  "972": "",
+  "973": "",
+  "974": "",
+  "976": ""
 
 };
 
 
 /* =========================================================
-   3. INFORMACIÓN HISTÓRICA DE LOS DEPARTAMENTOS
-   =========================================================
-
-   IMPORTANTE:
-
-   Si un departamento aparece aquí, automáticamente
-   aparecerá en DORADO en el mapa.
-
-   Para añadir un nuevo departamento simplemente
-   añadiremos su código en este objeto.
+   3. INFORMACIÓN HISTÓRICA
    ========================================================= */
 
 const departmentData = {
 
-  /* -------------------------------------------------------
+
+  /* =======================================================
      OISE — 60
-     ------------------------------------------------------- */
+     ======================================================= */
 
   "60": {
 
@@ -778,9 +1195,9 @@ const departmentData = {
   },
 
 
-  /* -------------------------------------------------------
+  /* =======================================================
      ORNE — 61
-     ------------------------------------------------------- */
+     ======================================================= */
 
   "61": {
 
@@ -807,45 +1224,65 @@ const departmentData = {
 
   }
 
+
+  /*
+   * ========================================================
+   * AQUÍ AÑADIREMOS POSTERIORMENTE LOS DEPARTAMENTOS
+   * QUE VAYAMOS INVESTIGANDO.
+   *
+   * Ejemplo:
+   *
+   * "971": {
+   *
+   *   description:
+   *     "Información histórica de Guadeloupe...",
+   *
+   *   emissions: [
+   *
+   *     {
+   *       locality: "Localidad",
+   *       dates: "1997",
+   *       denominations:
+   *         "1, 5 y 20 euros"
+   *     }
+   *
+   *   ]
+   *
+   * }
+   *
+   * Al introducirlo aquí, Guadeloupe aparecerá
+   * automáticamente en DORADO.
+   * ========================================================
+   */
+
 };
 
 
 /* =========================================================
-   4. DETERMINAR AUTOMÁTICAMENTE LOS DEPARTAMENTOS
-   CON INFORMACIÓN
-   =========================================================
-
-   Ya NO es necesario escribir manualmente una lista
-   de departamentos emisores.
-
-   El sistema comprueba automáticamente qué códigos
-   existen en departmentData.
-
-   Por tanto:
-
-   departmentData["61"]  → Orne aparece dorado.
-
-   departmentData["60"]  → Oise aparece dorado.
-
-   Si posteriormente añadimos:
-
-   departmentData["71"]
-
-   Saône-et-Loire aparecerá automáticamente dorado.
+   4. DEPARTAMENTOS CON INFORMACIÓN
    ========================================================= */
 
 const emittingDepartments =
   new Set(
-    Object.keys(departmentData)
+    Object.keys(
+      departmentData
+    )
   );
 
 
 /* =========================================================
-   5. GEOJSON DE LOS 96 DEPARTAMENTOS
+   5. GEOJSON
+   =========================================================
+
+   Este archivo contiene Francia metropolitana y
+   los departamentos de ultramar.
+
+   Fuente:
+   gregoiredavid/france-geojson
    ========================================================= */
 
 const geoJsonURL =
-  "https://raw.githubusercontent.com/gregoiredavid/france-geojson/master/departements-version-simplifiee.geojson";
+  "https://raw.githubusercontent.com/gregoiredavid/france-geojson/master/departements-avec-outre-mer.geojson";
 
 
 /* =========================================================
@@ -853,40 +1290,64 @@ const geoJsonURL =
    ========================================================= */
 
 const mapElement =
-  document.getElementById("map");
+  document.getElementById(
+    "map"
+  );
 
 const loadingElement =
-  document.getElementById("loading");
+  document.getElementById(
+    "loading"
+  );
 
 const errorElement =
-  document.getElementById("error");
+  document.getElementById(
+    "error"
+  );
 
 const infoPanel =
-  document.getElementById("info-panel");
+  document.getElementById(
+    "info-panel"
+  );
 
 const closeButton =
-  document.getElementById("close-button");
+  document.getElementById(
+    "close-button"
+  );
 
 const departmentName =
-  document.getElementById("department-name");
+  document.getElementById(
+    "department-name"
+  );
 
 const departmentCode =
-  document.getElementById("department-code");
+  document.getElementById(
+    "department-code"
+  );
 
 const departmentStatus =
-  document.getElementById("department-status");
+  document.getElementById(
+    "department-status"
+  );
 
 const departmentDescription =
-  document.getElementById("department-description");
+  document.getElementById(
+    "department-description"
+  );
 
 const emissionSection =
-  document.getElementById("emissions-section");
+  document.getElementById(
+    "emissions-section"
+  );
 
 const emissionList =
-  document.getElementById("emission-list");
+  document.getElementById(
+    "emission-list"
+  );
 
 const moreInfoButton =
-  document.getElementById("more-info-button");
+  document.getElementById(
+    "more-info-button"
+  );
 
 
 /* =========================================================
@@ -902,14 +1363,18 @@ closeButton.addEventListener(
     );
 
     document
-      .querySelectorAll(".department.selected")
-      .forEach(element => {
+      .querySelectorAll(
+        ".department.selected"
+      )
+      .forEach(
+        element => {
 
-        element.classList.remove(
-          "selected"
-        );
+          element.classList.remove(
+            "selected"
+          );
 
-      });
+        }
+      );
 
   }
 );
@@ -926,40 +1391,53 @@ function showDepartment(
 ) {
 
   document
-    .querySelectorAll(".department.selected")
-    .forEach(el => {
+    .querySelectorAll(
+      ".department.selected"
+    )
+    .forEach(
+      el => {
 
-      el.classList.remove(
-        "selected"
-      );
+        el.classList.remove(
+          "selected"
+        );
 
-    });
+      }
+    );
 
 
-  element.classList.add(
-    "selected"
-  );
+  if (element) {
+
+    element.classList.add(
+      "selected"
+    );
+
+  }
 
 
   const data =
-    departmentData[code] || {};
+    departmentData[code] ||
+    {};
 
 
   const hasEmission =
-    emittingDepartments.has(code);
+    emittingDepartments.has(
+      code
+    );
 
 
   departmentName.textContent =
-    name || "Departamento";
+    name ||
+    "Departamento";
 
 
   departmentCode.textContent =
-    "Código: " + code;
+    "Código: " +
+    code;
 
 
-  /* -------------------------------------------------------
-     ESTADO DEL DEPARTAMENTO
-     ------------------------------------------------------- */
+  /* =======================================================
+     ESTADO
+     ======================================================= */
 
   if (hasEmission) {
 
@@ -982,24 +1460,26 @@ function showDepartment(
   }
 
 
-  /* -------------------------------------------------------
+  /* =======================================================
      DESCRIPCIÓN
-     ------------------------------------------------------- */
+     ======================================================= */
 
   departmentDescription.textContent =
     data.description ||
     "Actualmente no hay información histórica incorporada para este departamento.";
 
 
-  /* -------------------------------------------------------
+  /* =======================================================
      EMISIONES
-     ------------------------------------------------------- */
+     ======================================================= */
 
-  emissionList.innerHTML = "";
+  emissionList.innerHTML =
+    "";
 
 
   const emissions =
-    data.emissions || [];
+    data.emissions ||
+    [];
 
 
   if (
@@ -1019,7 +1499,8 @@ function showDepartment(
           );
 
 
-        let text = "";
+        let text =
+          "";
 
 
         if (
@@ -1081,9 +1562,9 @@ function showDepartment(
   }
 
 
-  /* -------------------------------------------------------
+  /* =======================================================
      BOTÓN MÁS INFORMACIÓN
-     ------------------------------------------------------- */
+     ======================================================= */
 
   const url =
     departmentLinks[code];
@@ -1123,12 +1604,16 @@ function showDepartment(
 
 
 /* =========================================================
-   9. PROTEGER TEXTO HTML
+   9. PROTEGER HTML
    ========================================================= */
 
-function escapeHTML(value) {
+function escapeHTML(
+  value
+) {
 
-  return String(value)
+  return String(
+    value
+  )
 
     .replace(
       /&/g,
@@ -1159,12 +1644,567 @@ function escapeHTML(value) {
 
 
 /* =========================================================
-   10. CREAR MAPA
+   10. OBTENER CÓDIGO
+   ========================================================= */
+
+function getDepartmentCode(
+  feature
+) {
+
+  const properties =
+    feature.properties ||
+    {};
+
+
+  let code =
+
+    properties.code ||
+
+    properties.CODE_DEPT ||
+
+    properties.code_dept ||
+
+    properties.dep ||
+
+    properties.id ||
+
+    "";
+
+
+  code =
+    String(
+      code
+    )
+      .trim()
+      .toUpperCase();
+
+
+  /* =======================================================
+     CORSE
+     ======================================================= */
+
+  if (
+    code === "2A" ||
+    code === "2A0"
+  ) {
+
+    return "2A";
+
+  }
+
+
+  if (
+    code === "2B" ||
+    code === "2B0"
+  ) {
+
+    return "2B";
+
+  }
+
+
+  /* =======================================================
+     CÓDIGOS NUMÉRICOS DE UN DÍGITO
+     ======================================================= */
+
+  if (
+    /^\d+$/.test(
+      code
+    ) &&
+    code.length === 1
+  ) {
+
+    code =
+      "0" +
+      code;
+
+  }
+
+
+  return code;
+
+}
+
+
+/* =========================================================
+   11. CREAR MAPA METROPOLITANO
+   ========================================================= */
+
+function createMetropolitanMap(
+  geojson
+) {
+
+
+  const metropolitanFeatures =
+    geojson.features.filter(
+      feature => {
+
+        const code =
+          getDepartmentCode(
+            feature
+          );
+
+
+        return (
+          code !== "971" &&
+          code !== "972" &&
+          code !== "973" &&
+          code !== "974" &&
+          code !== "976"
+        );
+
+      }
+    );
+
+
+  const metropolitanGeoJSON = {
+
+    type:
+      "FeatureCollection",
+
+    features:
+      metropolitanFeatures
+
+  };
+
+
+  const width =
+    900;
+
+  const height =
+    760;
+
+
+  const svg =
+    d3
+      .select(
+        "#map"
+      )
+      .append(
+        "svg"
+      )
+
+      .attr(
+        "viewBox",
+        `0 0 ${width} ${height}`
+      )
+
+      .attr(
+        "preserveAspectRatio",
+        "xMidYMid meet"
+      );
+
+
+  /* =======================================================
+     PROYECCIÓN
+     ======================================================= */
+
+  const projection =
+    d3
+      .geoConicConformal()
+
+      .parallels(
+        [44, 49]
+      )
+
+      .rotate(
+        [0, 0]
+      )
+
+      .center(
+        [2.5, 46.5]
+      )
+
+      .fitSize(
+        [
+          width - 70,
+          height - 70
+        ],
+        metropolitanGeoJSON
+      );
+
+
+  const path =
+    d3
+      .geoPath()
+      .projection(
+        projection
+      );
+
+
+  const mapGroup =
+    svg.append(
+      "g"
+    );
+
+
+  /* =======================================================
+     DEPARTAMENTOS
+     ======================================================= */
+
+  mapGroup
+
+    .selectAll(
+      ".department"
+    )
+
+    .data(
+      metropolitanFeatures
+    )
+
+    .join(
+      "path"
+    )
+
+    .attr(
+      "class",
+      feature => {
+
+        const code =
+          getDepartmentCode(
+            feature
+          );
+
+
+        return emittingDepartments.has(
+          code
+        )
+
+          ? "department emitter"
+
+          : "department";
+
+      }
+    )
+
+    .attr(
+      "d",
+      path
+    )
+
+    .attr(
+      "data-code",
+      feature =>
+        getDepartmentCode(
+          feature
+        )
+    )
+
+    .on(
+      "click",
+      function(
+        event,
+        feature
+      ) {
+
+        event.stopPropagation();
+
+
+        const code =
+          getDepartmentCode(
+            feature
+          );
+
+
+        const name =
+          departments[code] ||
+
+          feature.properties?.nom ||
+
+          "Departamento";
+
+
+        showDepartment(
+          code,
+          name,
+          this
+        );
+
+      }
+    );
+
+
+  /* =======================================================
+     CLIC FUERA
+     ======================================================= */
+
+  svg.on(
+    "click",
+    function() {
+
+      infoPanel.classList.remove(
+        "visible"
+      );
+
+
+      document
+        .querySelectorAll(
+          ".department.selected"
+        )
+        .forEach(
+          element => {
+
+            element.classList.remove(
+              "selected"
+            );
+
+          }
+        );
+
+    }
+  );
+
+}
+
+
+/* =========================================================
+   12. CREAR MAPAS DE ULTRAMAR
+   ========================================================= */
+
+function createOverseasMaps(
+  geojson
+) {
+
+
+  const overseasCodes = [
+
+    "971",
+    "972",
+    "973",
+    "974",
+    "976"
+
+  ];
+
+
+  const container =
+    document.getElementById(
+      "overseas-maps"
+    );
+
+
+  overseasCodes.forEach(
+    code => {
+
+
+      const feature =
+        geojson.features.find(
+          item =>
+            getDepartmentCode(
+              item
+            ) === code
+        );
+
+
+      if (!feature) {
+        return;
+      }
+
+
+      const card =
+        document.createElement(
+          "div"
+        );
+
+
+      card.className =
+        "overseas-map";
+
+
+      const name =
+        departments[code] ||
+
+        feature.properties?.nom ||
+
+        "Departamento";
+
+
+      const title =
+        document.createElement(
+          "h3"
+        );
+
+
+      title.className =
+        "overseas-name";
+
+
+      title.textContent =
+        name;
+
+
+      const codeElement =
+        document.createElement(
+          "div"
+        );
+
+
+      codeElement.className =
+        "overseas-code";
+
+
+      codeElement.textContent =
+        "Código " +
+        code;
+
+
+      const svgContainer =
+        document.createElement(
+          "div"
+        );
+
+
+      svgContainer.className =
+        "overseas-svg";
+
+
+      card.appendChild(
+        title
+      );
+
+
+      card.appendChild(
+        codeElement
+      );
+
+
+      card.appendChild(
+        svgContainer
+      );
+
+
+      container.appendChild(
+        card
+      );
+
+
+      /* =====================================================
+         SVG INDIVIDUAL
+         ===================================================== */
+
+      const width =
+        220;
+
+      const height =
+        145;
+
+
+      const featureCollection = {
+
+        type:
+          "FeatureCollection",
+
+        features:
+          [feature]
+
+      };
+
+
+      const svg =
+        d3
+          .select(
+            svgContainer
+          )
+          .append(
+            "svg"
+          )
+
+          .attr(
+            "viewBox",
+            `0 0 ${width} ${height}`
+          )
+
+          .attr(
+            "preserveAspectRatio",
+            "xMidYMid meet"
+          );
+
+
+      const projection =
+        d3
+          .geoMercator()
+          .fitSize(
+            [
+              width - 25,
+              height - 25
+            ],
+            featureCollection
+          );
+
+
+      const path =
+        d3
+          .geoPath()
+          .projection(
+            projection
+          );
+
+
+      svg
+
+        .append(
+          "path"
+        )
+
+        .datum(
+          feature
+        )
+
+        .attr(
+          "class",
+
+          emittingDepartments.has(
+            code
+          )
+
+            ? "department emitter"
+
+            : "department"
+        )
+
+        .attr(
+          "d",
+          path
+        )
+
+        .attr(
+          "data-code",
+          code
+        )
+
+        .on(
+          "click",
+          function(
+            event
+          ) {
+
+            event.stopPropagation();
+
+
+            showDepartment(
+              code,
+              name,
+              this
+            );
+
+          }
+        );
+
+
+    }
+  );
+
+}
+
+
+/* =========================================================
+   13. CREAR TODO EL MAPA
    ========================================================= */
 
 async function createMap() {
 
   try {
+
 
     const response =
       await fetch(
@@ -1191,190 +2231,28 @@ async function createMap() {
       "none";
 
 
-    const width =
-      900;
+    /* =====================================================
+       MAPA PRINCIPAL
+       ===================================================== */
 
-    const height =
-      760;
-
-
-    const svg =
-      d3
-        .select("#map")
-        .append("svg")
-
-        .attr(
-          "viewBox",
-          `0 0 ${width} ${height}`
-        )
-
-        .attr(
-          "preserveAspectRatio",
-          "xMidYMid meet"
-        );
-
-
-    /* -------------------------------------------------------
-       PROYECCIÓN DE FRANCIA
-       ------------------------------------------------------- */
-
-    const projection =
-      d3
-        .geoConicConformal()
-
-        .parallels(
-          [44, 49]
-        )
-
-        .rotate(
-          [0, 0]
-        )
-
-        .center(
-          [2.5, 46.5]
-        )
-
-        .fitSize(
-          [
-            width - 70,
-            height - 70
-          ],
-          geojson
-        );
-
-
-    const path =
-      d3
-        .geoPath()
-        .projection(
-          projection
-        );
-
-
-    /* -------------------------------------------------------
-       GRUPO PRINCIPAL
-       ------------------------------------------------------- */
-
-    const mapGroup =
-      svg.append("g");
-
-
-    /* -------------------------------------------------------
-       DEPARTAMENTOS
-       ------------------------------------------------------- */
-
-    mapGroup
-
-      .selectAll(
-        ".department"
-      )
-
-      .data(
-        geojson.features
-      )
-
-      .join("path")
-
-      .attr(
-        "class",
-        feature => {
-
-          const code =
-            getDepartmentCode(
-              feature
-            );
-
-
-          return emittingDepartments.has(
-            code
-          )
-
-            ? "department emitter"
-
-            : "department";
-
-        }
-      )
-
-      .attr(
-        "d",
-        path
-      )
-
-      .attr(
-        "data-code",
-        feature =>
-          getDepartmentCode(
-            feature
-          )
-      )
-
-      .on(
-        "click",
-        function(
-          event,
-          feature
-        ) {
-
-          event.stopPropagation();
-
-
-          const code =
-            getDepartmentCode(
-              feature
-            );
-
-
-          const name =
-            departments[code] ||
-
-            feature.properties?.nom ||
-
-            "Departamento";
-
-
-          showDepartment(
-            code,
-            name,
-            this
-          );
-
-        }
-      );
-
-
-    /* -------------------------------------------------------
-       CLIC FUERA DEL MAPA
-       ------------------------------------------------------- */
-
-    svg.on(
-      "click",
-      function() {
-
-        infoPanel.classList.remove(
-          "visible"
-        );
-
-
-        document
-          .querySelectorAll(
-            ".department.selected"
-          )
-          .forEach(
-            element => {
-
-              element.classList.remove(
-                "selected"
-              );
-
-            }
-          );
-
-      }
+    createMetropolitanMap(
+      geojson
     );
 
 
-  } catch (error) {
+    /* =====================================================
+       ULTRAMAR
+       ===================================================== */
+
+    createOverseasMaps(
+      geojson
+    );
+
+
+  } catch (
+    error
+  ) {
+
 
     console.error(
       error
@@ -1394,89 +2272,14 @@ async function createMap() {
 
 
 /* =========================================================
-   11. OBTENER CÓDIGO DEL DEPARTAMENTO
-   ========================================================= */
-
-function getDepartmentCode(
-  feature
-) {
-
-  const properties =
-    feature.properties || {};
-
-
-  let code =
-
-    properties.code ||
-
-    properties.CODE_DEPT ||
-
-    properties.code_dept ||
-
-    properties.dep ||
-
-    properties.id ||
-
-    "";
-
-
-  code =
-    String(code)
-      .trim()
-      .toUpperCase();
-
-
-  /* -------------------------------------------------------
-     CORSE
-     ------------------------------------------------------- */
-
-  if (
-    code === "2A" ||
-    code === "2A0"
-  ) {
-
-    return "2A";
-
-  }
-
-
-  if (
-    code === "2B" ||
-    code === "2B0"
-  ) {
-
-    return "2B";
-
-  }
-
-
-  /* -------------------------------------------------------
-     CÓDIGOS NUMÉRICOS
-     ------------------------------------------------------- */
-
-  if (
-    /^\d+$/.test(code) &&
-    code.length === 1
-  ) {
-
-    code =
-      "0" + code;
-
-  }
-
-
-  return code;
-
-}
-
-
-/* =========================================================
-   12. INICIAR MAPA
+   14. INICIAR
    ========================================================= */
 
 createMap();
 
+
 </script>
+
 
 </body>
 </html>
